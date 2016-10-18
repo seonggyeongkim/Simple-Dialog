@@ -9,6 +9,10 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 public class MainActivity extends AppCompatActivity {
 
     DatePicker datePic;
@@ -45,8 +49,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     String readDiary(String fileName){
+        String diaryContents=null;
+        try {
+            FileInputStream in=openFileInput(fileName);
+            byte[] txt=new byte[500]; //한글 20자 정도 저장!
+            in.read(txt); //예외가 발생했을때 catch문 실행!
+            in.close();
+            diaryContents=new String(txt);
+            butSave.setText("수정 하기"); //버튼의 글짜 바꾸기!
 
-        return null;
+        } catch (IOException e) {
+            editDiary.setHint("읽어올 일기가 없음");
+            butSave.setText("새로 저장");
+        }
+        return diaryContents;
     }
 
 }
